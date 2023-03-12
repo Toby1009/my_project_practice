@@ -1,16 +1,15 @@
 # example01
 
-A new Flutter project.
+這是我第一個專案練習，用flutter克隆iphone的ebook app
 
-## Getting Started
+## 進度
+2023/3/12 8:02：完成往上滑時標題停在appbar，並且appbar透明化，下滑時標題字體變大
 
-This project is a starting point for a Flutter application.
+## 待解決
+appbar的字體有淡入淡出的效果，下面分割線到一個點才會出現
 
-A few resources to get you started if this is your first Flutter project:
+## 畫面
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![](https://user-images.githubusercontent.com/69885352/224544777-6d1eacb3-08d2-4865-98f6-f17753648099.mov)
+
