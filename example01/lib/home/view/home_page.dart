@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
- double fontSize = 40.0;
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -11,26 +11,42 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final String text = "Reading Now";
   late AnimationController _textFontSizeController;
   late Animation<double> _textFontSizeAnimation;
-  bool isUP=false;
+  double fontSize = 30;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _textFontSizeController = AnimationController(
-        vsync: this,
+      vsync: this,
       duration: const Duration(milliseconds: 300),
     );
     _textFontSizeAnimation = Tween<double>(
       begin: fontSize,
-      end: 40,
+      end: 30,
     ).animate(
-      _textFontSizeController);
-    _textFontSizeController.forward();
-
+      CurvedAnimation(
+          parent: _textFontSizeController,
+          curve: Curves.linear)
+    )..addStatusListener((status) {
+      if(status == AnimationStatus.completed){
+        _textFontSizeAnimation = Tween<double>(
+          begin: fontSize,
+          end: 30,
+        ).animate(
+            CurvedAnimation(
+                parent: _textFontSizeController,
+                curve: Curves.linear)
+        );
+        _textFontSizeController.reset();
+      }
+    })..addListener(() {
+      fontSize = _textFontSizeAnimation.value;
+    });
 
   }
 
@@ -40,6 +56,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
     super.dispose();
     _textFontSizeController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,75 +71,71 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin{
                   text: text),
               pinned: true,
             ),
-             SliverToBoxAdapter(
-              child:  SizedBox(
-                width: double.maxFinite,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AnimatedBuilder(
-                          animation: _textFontSizeController,
-                          builder: (BuildContext context, Widget? child) {
-                            return Text(
-                              text,
-                              style:  isUP
-                                  ?TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: _textFontSizeAnimation.value,
-                              )
-                                  :TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: fontSize,
-                              )
-                            );
-                          },
-                        ),
-                        const Icon(
-                          Icons.account_circle_rounded,
-                          size: 40,
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                  width: double.maxFinite,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AnimatedBuilder(
+                            animation: _textFontSizeController,
+                            builder: (BuildContext context, Widget? child) {
+                              return Text(
+                                text,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: fontSize,
+                                ),
+                              );
+                            },
+                          ),
+                          const Icon(
+                            Icons.account_circle_rounded,
+                            size: 40,
+                          )
+                        ],
+                      )
+                    ],
+                  )),
             ),
           ],
         ),
-        onPointerMove: (e){
-          isUP = false;
-          setState(() {
-            print(fontSize);
-            if(e.delta.dy<0&&fontSize>=40||fontSize<=50&&e.delta.dy>0){
-              fontSize+=e.delta.dy/50;
-            }
-          });
+        onPointerMove: (e) {
+          if (fontSize >= 30 && fontSize <= 50) {
+              setState(() {
+                fontSize+=e.delta.dy/50;
+              // print(fontSize);
+              });
+          }
         },
-        onPointerUp: (e){
-          isUP = true;
-          setState(() {
-            _textFontSizeController.forward();
-            if(_textFontSizeController.status == AnimationStatus.completed ){
-              fontSize = 40;
-            }
-          });
+        onPointerUp: (e) {
+          _textFontSizeAnimation = Tween<double>(
+            begin: fontSize,
+            end: 30,
+          ).animate(
+              CurvedAnimation(
+                  parent: _textFontSizeController,
+                  curve: Curves.linear)
+          );
+          _textFontSizeController.forward();
         },
       ),
     );
   }
 }
 
-
-
-
 class MySliverAppBar extends SliverPersistentHeaderDelegate {
   final double maxHeaderExtent;
   final double topHeight;
   final String text;
 
-  MySliverAppBar({required this.maxHeaderExtent,required this.topHeight,required this.text});
+  MySliverAppBar(
+      {required this.maxHeaderExtent,
+      required this.topHeight,
+      required this.text});
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -130,18 +143,20 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
     return SizedBox(
         width: double.maxFinite,
         child: ClipRect(
-          child:BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 50,sigmaY: 50),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
             child: Column(
               children: [
-                SizedBox(height: topHeight,),
+                SizedBox(
+                  height: topHeight,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children:  [
+                  children: [
                     Opacity(
-                      opacity: shrinkOffset/(maxHeaderExtent+topHeight),
-                      child:  Text(
+                      opacity: shrinkOffset / (maxHeaderExtent + topHeight),
+                      child: Text(
                         text,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
@@ -154,20 +169,18 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate {
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 
   @override
   // TODO: implement maxExtent
-  double get maxExtent => maxHeaderExtent+topHeight;
+  double get maxExtent => maxHeaderExtent + topHeight;
 
   @override
   // TODO: implement minExtent
-  double get minExtent =>maxHeaderExtent+topHeight;
+  double get minExtent => maxHeaderExtent + topHeight;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       true;
 }
-
