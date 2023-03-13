@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final String text = "Reading Now";
   late AnimationController _textFontSizeController;
   late Animation<double> _textFontSizeAnimation;
-  double fontSize = 30;
+  double fontSize = 40;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
     _textFontSizeAnimation = Tween<double>(
       begin: fontSize,
-      end: 30,
+      end: 40,
     ).animate(
       CurvedAnimation(
           parent: _textFontSizeController,
@@ -63,67 +63,184 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Listener(
-        child: CustomScrollView(
-          slivers: [
-            SliverPersistentHeader(
-              delegate: MySliverAppBar(
-                  maxHeaderExtent: 45.0,
-                  topHeight: MediaQuery.of(context).padding.top,
-                  text: text),
-              pinned: true,
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                  width: double.maxFinite,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AnimatedBuilder(
-                            animation: _textFontSizeController,
-                            builder: (BuildContext context, Widget? child) {
-                              return Text(
-                                text,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: fontSize,
-                                ),
-                              );
-                            },
-                          ),
-                          const Icon(
-                            Icons.account_circle_rounded,
-                            size: 40,
-                          )
+      body: SizedBox(
+        height: double.maxFinite,
+        width: double.maxFinite,
+        child: Listener(
+          child: CustomScrollView(
+            slivers: [
+              SliverPersistentHeader(
+                delegate: MySliverAppBar(
+                    maxHeaderExtent: 45.0,
+                    topHeight: MediaQuery.of(context).padding.top,
+                    text: text),
+                pinned: true,
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                    padding: const EdgeInsets.only(left: 35,right: 35),
+                    width: double.maxFinite,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white10,
+                          Colors.grey,
                         ],
                       )
-                    ],
-                  )
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AnimatedBuilder(
+                              animation: _textFontSizeController,
+                              builder: (BuildContext context, Widget? child) {
+                                return Text(
+                                  text,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: fontSize,
+                                  ),
+                                );
+                              },
+                            ),
+                            const Icon(
+                              Icons.account_circle_sharp,
+                              size: 50,
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 10,),
+                        Row(
+                          children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: Colors.grey.shade300,
+                                  ),
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: Colors.white,
+                                  ),
+                                  width: 13,
+                                  height: 13,
+                                )
+                              ],
+                            ),
+                            Text(
+                                ' Todays\'s Reading ',
+                                style: TextStyle(
+                                  color: Colors.blue.shade900,
+                                ),
+                            ),
+                            Text(
+                              '5 minutes left',
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10,),
+                        const Divider(height: 3,color: Colors.grey,),
+                        const SizedBox(height: 10,),
+                        SizedBox(
+                          height: 380,
+                          width: double.maxFinite,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                width: MediaQuery.of(context).size.width/2-65,
+                                child: Column(
+                                  //mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                    children:  [
+                                      const Text(
+                                        'Current',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 50,),
+                                      Image.asset('assets/book_01.jpg'),
+                                      const Text(
+                                        '哈囉你好',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                ),
+                              ),
+                              const SizedBox(width: 40,),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                width: MediaQuery.of(context).size.width/2-65,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Recent',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 50,),
+                                      Image.asset('assets/book_01.jpg'),
+                                      const Text(
+                                        '哈囉你好',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+          onPointerMove: (e) {
+            if (fontSize >=40 && fontSize <= 45) {
+                setState(() {
+                  fontSize+=e.delta.dy/100;
+                // print(fontSize);
+                });
+            }
+          },
+          onPointerUp: (e) {
+            _textFontSizeAnimation = Tween<double>(
+              begin: fontSize,
+              end: 40,
+            ).animate(
+                CurvedAnimation(
+                    parent: _textFontSizeController,
+                    curve: Curves.linear)
+            );
+            _textFontSizeController.forward();
+          },
         ),
-        onPointerMove: (e) {
-          if (fontSize >= 30 && fontSize <= 50) {
-              setState(() {
-                fontSize+=e.delta.dy/50;
-              // print(fontSize);
-              });
-          }
-        },
-        onPointerUp: (e) {
-          _textFontSizeAnimation = Tween<double>(
-            begin: fontSize,
-            end: 30,
-          ).animate(
-              CurvedAnimation(
-                  parent: _textFontSizeController,
-                  curve: Curves.linear)
-          );
-          _textFontSizeController.forward();
-        },
       ),
     );
   }
