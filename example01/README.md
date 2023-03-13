@@ -10,6 +10,4 @@ appbar的字體有淡入淡出的效果，下面分割線到一個點才會出�
 
 ## 畫面
 
-
-![](https://user-images.githubusercontent.com/69885352/224544777-6d1eacb3-08d2-4865-98f6-f17753648099.mov)
-
+![](https://user-images.githubusercontent.com/69885352/224546640-dc1f82a4-0e00-46e4-a3db-21e865d50930.mov)
